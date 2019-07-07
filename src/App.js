@@ -1,26 +1,64 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import ContentEditable from "react-contenteditable";
+
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      value: ""
+    };
+  }
+
+  handleContentEditable = e => {
+    console.log("handle content editable change", e);
+    this.setState({
+      value: e.target.value
+    });
+  };
+
+  handleInputChange = e => {
+    console.log("handle input change", e);
+    this.setState({
+      value: e.target.value
+    });
+  };
+
+  pasteAsPlainText = event => {
+    event.preventDefault()
+  
+    const text = event.clipboardData.getData('text/plain')
+    document.execCommand('insertHTML', false, text)
+  }
+
+  highlightAll = () => {
+    setTimeout(() => {
+      document.execCommand('selectAll', false, null)
+    }, 0)
+  }
+
+  render() {
+    const { value } = this.state;
+
+    return (
+      <div className="App">
+        <div className="stage">
+          <input className="form-control" value={value} onChange={this.handleInputChange} />
+
+          <ContentEditable
+            html={value}
+            className="mention-input form-control"
+            onChange={this.handleContentEditable}
+            onPaste={this.pasteAsPlainText} 
+            onFocus={this.highlightAll}
+          />
+
+          <h3>{value}</h3>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
