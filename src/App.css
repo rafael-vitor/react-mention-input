@@ -10,3 +10,12 @@
   width: 50%;
   height: 500px;
 }
+
+.highlighted {
+  color: #1264a3;
+  background: #e8f5fa;
+}
+
+h3 {
+  height: 100px;
+}
